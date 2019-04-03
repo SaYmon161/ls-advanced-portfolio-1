@@ -19,12 +19,7 @@ const thumbs = {
   props: {
     works: Array,
     currentWork: Object
-  },
-  methods: {
-    handleClick(id) { 
-      this.$emit('change', id)
-    }
-  },
+  }
 };
 
 const tags = {
@@ -98,13 +93,7 @@ new Vue({
           break;
       }
     },
-    handleChange(id) {
-      let index;
-      this.works.forEach((item, ndx) => {
-        if (ndx !==0 && item.id === id) {
-          index = ndx;
-        }
-      })
+    handleChange(index) {
       const arr = this.works.splice(0, index);
       this.works = [...this.works, ...arr];
     }
