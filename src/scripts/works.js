@@ -19,7 +19,12 @@ const thumbs = {
   props: {
     works: Array,
     currentWork: Object
-  }
+  },
+  methods: {
+    handleClick(id) { 
+      this.$emit('change', id)
+    }
+  },
 };
 
 const tags = {
@@ -47,13 +52,8 @@ const display = {
   props: {
     works: Array,
     currentWork: Object,
-    currentIndex: Number
-  },
-  computed: {
-    reversedWorks() {
-      const works = [...this.works];
-      return works.reverse();
-    }
+    currentIndex: Number,
+    thumbsWorksArray: Array
   },
   template: "#slider-display"
 };
@@ -63,7 +63,8 @@ new Vue({
   data() {
     return {
       works: [],
-      currentIndex: 0
+      currentIndex: 0,
+      thumbsWorksArray: []
     };
   },
   components: {
@@ -88,8 +89,13 @@ new Vue({
       switch (direction) {
         case "next":
           this.currentIndex++;
+          const lastSlide = this.thumbsWorksArray[this.thumbsWorksArray.length - 1];
+          this.thumbsWorksArray.unshift(lastSlide);
+          this.thumbsWorksArray.pop();
           break;
         case "prev":
+          this.thumbsWorksArray.push(this.thumbsWorksArray[0]);
+          this.thumbsWorksArray.shift();
           this.currentIndex--;
           break;
       }
@@ -99,6 +105,19 @@ new Vue({
 
       if (value > worksAmount) this.currentIndex = 0;
       if (value < 0) this.currentIndex = worksAmount;
+    },
+    handleChange(id) {
+      let index;
+      let work;
+      this.thumbsWorksArray.forEach((item, ndx) => {
+        if (ndx !==0 && item.id === id) {
+          index = ndx;
+          work = item;
+        }
+      })
+      const arr = this.thumbsWorksArray.splice(0, index);
+      this.thumbsWorksArray = [...this.thumbsWorksArray, ...arr];
+      this.currentIndex = this.works.indexOf(work);
     }
   },
   watch: {
@@ -111,6 +130,9 @@ new Vue({
     const works = this.makeArrWithRequiredImages(data);
 
     this.works = works;
+    this.currentIndex = this.works.length - 1;
+    this.thumbsWorksArray = [...works];
+    this.thumbsWorksArray = this.thumbsWorksArray.reverse()
   },
   template: "#slider-container"
 });

@@ -4,7 +4,9 @@ script(type="text/x-template")#slider-container
       :works="works",
       :currentWork="currentWork",
       :currentIndex="currentIndex"
+      :thumbsWorksArray="thumbsWorksArray"
       @slide="handleSlide"
+      @change="handleChange"
     )
     info(
       :currentWork="currentWork"
@@ -36,20 +38,21 @@ script(type="text/x-template")#slider-display
       )
 
       thumbs(
-        :works="reversedWorks",
+        :works="thumbsWorksArray",
         :currentWork="currentWork"
+        @change="id => $emit('change', id)"
       )
             
 script(type="text/x-template")#slider-thumbs
   ul.works-slider__thumbs
     li.works-slider__thumb-item(
       v-for="work in works"
-      :class="{active: currentWork.id === work.id}"
+      @click="handleClick(work.id)"
     )
       a.works-slider__thumb-link
         img(:src="work.photo", alt="").works-slider__thumb
 
 script(type="text/x-template")#slider-btns
   .works-slider__buttons
-    a(href="#" @click.prevent="$emit('slide', 'next')").works-slider__btn.works-slider__btn_next
-    a(href="#" @click.prevent="$emit('slide', 'prev')").works-slider__btn.works-slider__btn_prev
+    a(href="#" @click.prevent="$emit('slide', 'prev')").works-slider__btn.works-slider__btn_next
+    a(href="#" @click.prevent="$emit('slide', 'next')").works-slider__btn.works-slider__btn_prev
