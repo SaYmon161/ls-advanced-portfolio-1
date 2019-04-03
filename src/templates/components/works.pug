@@ -4,7 +4,6 @@ script(type="text/x-template")#slider-container
       :works="works",
       :currentWork="currentWork",
       :currentIndex="currentIndex"
-      :thumbsWorksArray="thumbsWorksArray"
       @slide="handleSlide"
       @change="handleChange"
     )
@@ -38,7 +37,7 @@ script(type="text/x-template")#slider-display
       )
 
       thumbs(
-        :works="thumbsWorksArray",
+        :works="works",
         :currentWork="currentWork"
         @change="id => $emit('change', id)"
       )
