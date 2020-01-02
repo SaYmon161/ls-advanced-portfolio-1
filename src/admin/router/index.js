@@ -2,36 +2,40 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import routes from "./routes";
 import axios from "axios";
-
-import {
-  setAuthHttpHeaderToAxios,
-  getTokenFromLocalStorage
-} from "../helpers/token";
+import store from '../store/index'
+import {setAuthHttpHeaderToAxios, getTokenFromLocalStorage} from '../helpers/token'
 
 Vue.use(VueRouter);
 
 const guard = axios.create({
-  baseURL: "http://localhost:8000"
+  baseURL: "https://webdev-api.loftschool.com/"
 });
 
 const router = new VueRouter({ routes });
 
 router.beforeEach((to, from, next) => {
   const isPublicRoute = to.matched.some(record => record.meta.public);
+  const isUserLogged = store.getters["auth/userIsLogged"];
 
-  if (isPublicRoute === false) {
+  if (isPublicRoute === false && isUserLogged === false) {
     setAuthHttpHeaderToAxios(guard, getTokenFromLocalStorage());
     guard
       .get("/user")
       .then(response => {
-        // next();
+        store.commit("user/SET_USER", response.data.user);
+        next();
       })
       .catch(error => {
-        // router.replace("/login");
+        router.replace("/login");
         localStorage.removeItem("token");
       });
   } else {
-    // next();
+    guard
+      .get("/user")
+      .then(response => {
+        store.commit("user/SET_USER", response.data.user);
+        next();
+      })
   }
 
   next();

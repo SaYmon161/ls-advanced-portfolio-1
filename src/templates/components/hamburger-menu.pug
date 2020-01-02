@@ -1,0 +1,23 @@
+script(type="text/x-template")#hamburger-menu
+  .hamburger-menu
+    .hamburger-btn(@click="menuIsOpened = !menuIsOpened")
+      span
+    transition(name="slide")
+      .hamburger-menu__content(v-if="menuIsOpened")
+        .hamburger-btn.hamburger-btn--close(@click="menuIsOpened = !menuIsOpened")
+          span
+        ul.hamburger-menu__list
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 1
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 2
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 3
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 4
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 5
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 6
+          li.hamburger-menu__item
+            a.hamburger-menu__link Пункт меню 7

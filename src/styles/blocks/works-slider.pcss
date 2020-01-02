@@ -69,10 +69,14 @@
 
 .works-slider__thumbs {
   position: absolute;
-  right: 0;
+  right: -3px;
   bottom: 0;
   width: 178px;
-
+  height: 80%;
+  overflow: hidden;
+  padding-top: 3px;
+  padding-left: 3px;
+  padding-right: 3px;
 
   @include phones {
     display: none;
@@ -80,11 +84,15 @@
 }
 
 .works-slider__thumb-item {
-  height: 100px;
+  height: calc(100%/4);
   transition: .2s;
-  &:first-child,
+  &.active,
   &:hover {
-    outline: 3px solid #f29400;
+    border: 3px solid #f29400;
+  }
+  @include tablets {
+    height: calc(100%/3);
+
   }
 }
 

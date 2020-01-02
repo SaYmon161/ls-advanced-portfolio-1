@@ -36,9 +36,6 @@ export default {
       blocked: false
     };
   },
-  updated() {
-    this.newTitle = this.categoryData.category
-  },
   methods: {
     ...mapActions("skills", ["updateSkillsGroup", "removeSkillsGroup"]),
     ...mapActions("tooltips", ["showTooltip"]),

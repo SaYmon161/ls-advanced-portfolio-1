@@ -16,9 +16,30 @@ const btns = {
 
 const thumbs = {
   template: "#slider-thumbs",
+  data() {
+    return {
+      translate: 0,
+      thumbHeight: 0,
+      thumbsHeight: 0,
+    }
+  },
   props: {
     works: Array,
-    currentWork: Object
+    currentWork: Object,
+    currentIndex: Number
+  },
+  watch: {
+    currentIndex(newValue, oldValue) {
+      this.thumbHeight = this.$refs.thumb[0].offsetHeight;
+      this.thumbsHeight = this.$refs.thumbs.offsetHeight;
+      const newThumbsHeight = this.thumbHeight * (this.works.length - newValue);
+      const thumbsInList = Math.round(this.thumbsHeight / this.thumbHeight);
+      if (newThumbsHeight > this.thumbsHeight) {
+        this.translate = -this.thumbHeight * (this.works.length - newValue - thumbsInList);
+      } else if (newValue = (this.works.length - 1)) {
+        this.translate = 0; 
+      }
+    }
   }
 };
 
@@ -47,8 +68,13 @@ const display = {
   props: {
     works: Array,
     currentWork: Object,
-    currentIndex: Number,
-    works: Array
+    currentIndex: Number
+  },
+  computed: {
+    reversedWorks() {
+      const works = [...this.works];
+      return works.reverse();
+    }
   },
   template: "#slider-display"
 };
@@ -58,8 +84,7 @@ new Vue({
   data() {
     return {
       works: [],
-      currentIndex: 0,
-      works: []
+      currentIndex: 0
     };
   },
   components: {
@@ -68,7 +93,7 @@ new Vue({
   },
   computed: {
     currentWork() {
-      return this.works[0];
+      return this.works[this.currentIndex];
     }
   },
   methods: {
@@ -83,26 +108,31 @@ new Vue({
     handleSlide(direction) {
       switch (direction) {
         case "next":
-          const lastSlide = this.works[this.works.length - 1];
-          this.works.unshift(lastSlide);
-          this.works.pop();
+          this.currentIndex++;
           break;
         case "prev":
-          this.works.push(this.works[0]);
-          this.works.shift();
+          this.currentIndex--;
           break;
       }
     },
-    handleChange(index) {
-      const arr = this.works.splice(0, index);
-      this.works = [...this.works, ...arr];
+    makeInfititeLoopForCurIndex(value) {
+      const worksAmount = this.works.length - 1;
+
+      if (value > worksAmount) this.currentIndex = 0;
+      if (value < 0) this.currentIndex = worksAmount;
+    }
+  },
+  watch: {
+    currentIndex(value) {
+      this.makeInfititeLoopForCurIndex(value);
     }
   },
   created() {
     const data = require("../data/works.json");
     const works = this.makeArrWithRequiredImages(data);
 
-    this.works = works.reverse();
+    this.works = works;
+    this.currentIndex = this.works.length - 1;
   },
   template: "#slider-container"
 });

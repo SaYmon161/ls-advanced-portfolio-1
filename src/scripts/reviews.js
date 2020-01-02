@@ -16,7 +16,6 @@ new Vue({
           nextEl: '.reviews__btn_next',
           prevEl: '.reviews__btn_prev',
         },
-        loop: true,
         slidesPerView: 2,
         slidesPerGroup: 2,
         spaceBetween: 50
