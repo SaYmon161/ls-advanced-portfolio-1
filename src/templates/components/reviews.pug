@@ -6,7 +6,7 @@ script(type="text/x-template")#reviews
         button(type="button").reviews__btn.reviews__btn_prev
         button(type="button").reviews__btn.reviews__btn_next
     .reviews__content
-      swiper(:options="swiperOption" ref="mySwiper").reviews__content-list
+      swiper(:options="swiperOption").reviews__content-list
         swiper-slide.reviews__content-item(v-for="review in reviews")
           .quote
             .quote__text
